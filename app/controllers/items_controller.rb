@@ -3,7 +3,7 @@ class ItemsController < ApplicationController
 
   def index
     if params[:user_id]
-      user = User.find(params[:user_id])
+      user = find_user
       items = user.items
     else
       items = Item.all
@@ -12,7 +12,7 @@ class ItemsController < ApplicationController
   end
 
   def show
-    item = Item.find(params[:id])
+    item = find_item
     render json: item, include: :user
   end
 
@@ -30,6 +30,17 @@ class ItemsController < ApplicationController
   end
 
   private
+
+  def find_item
+    Item.find(params[:id])
+  end
+
+  def find_user
+    User.find(params[:user_id])
+  end
+
+  def item_params
+  end
 
   def render_not_found_response
     render json: { error: "User not found" }, status: :not_found
